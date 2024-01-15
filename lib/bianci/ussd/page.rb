@@ -7,12 +7,15 @@ module Bianci
 
       def initialize(session)
         @session = session
+        @request = proc { "No request found" }
       end
 
-      def render_and_await(body)
+      def render(body, options = {})
+        raise ArgumentError, "render body expected to be a string" unless body.is_a? String
+
         session.tap do |s|
           s.prompt_data = s.params.slice(:mobile_number, :session_id).merge(
-            { activity_state: :subsequent, body: body }
+            { activity_state: options[:state], body: body }
           )
 
           s.page_number = self.class.name.split("::").last
@@ -20,10 +23,37 @@ module Bianci
         end
       end
 
-      def method_missing(name, *args)
-        name = name.to_s
-        return super unless name.start_with? "redirect_to"
+      def load_page(page_number, menu_name)
+        constant_name = "USSD::#{menu_name.camelize}Menu::#{page_number}"
+        page = constant_name.safe_constantize
 
+        unless page
+          raise PageLoadError,
+                "#{constant_name} is supposed to be defined to process #{menu_name} menu page #{page_number}"
+        end
+
+        session.menu = Bianci::USSD::Menu.new(menu_name)
+        page.new(session).send(:request)
+      end
+
+      def method_missing(method_name, *args)
+        name = method_name.to_s
+
+        allowed_dynamic_methods_prefix_delegator = {
+          "redirect_to_" => proc { delegate_redirected_to(name) },
+          "render_and_" => proc { delegate_render_and(name, args) }
+        }
+
+        dynamic_method = allowed_dynamic_methods_prefix_delegator.find do |key, _value|
+          name.start_with? key
+        end
+
+        return super unless dynamic_method.present?
+
+        dynamic_method.second.call
+      end
+
+      def delegate_redirected_to(name)
         name.delete_prefix!("redirect_to_")
 
         case name
@@ -36,16 +66,15 @@ module Bianci
         end
       end
 
-      def load_page(page_number, menu_name)
-        constant_name = "USSD::#{menu_name.camelize}Menu::#{page_number}"
-        page = constant_name.safe_constantize
+      def delegate_render_and(name, args)
+        name.delete_prefix!("render_and_")
 
-        unless page
-          raise "PageLoadError: #{constant_name} is supposed to be defined to process #{menu_name} menu page #{page_number}"
-        end
+        states = {
+          "await" => :await,
+          "end" => :end
+        }
 
-        session.menu = Bianci::USSD::Menu.new(menu_name)
-        page.new(session).send(:request)
+        render args.first, state: states[name]
       end
     end
   end

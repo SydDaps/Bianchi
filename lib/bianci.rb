@@ -11,6 +11,7 @@ require_relative "bianci/ussd/menu"
 require_relative "bianci/ussd/session"
 require_relative "bianci/ussd/page"
 require_relative "bianci/ussd/store"
+require_relative "bianci/ussd/errors"
 
 module Bianci
   class Error < StandardError; end

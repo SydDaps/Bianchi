@@ -10,7 +10,7 @@ module Bianci
         @activity_state = params[:activity_state]
         @mobile_number = params[:mobile_number]
         @id = params[:session_id]
-        @input = params[:input]
+        @input_body = params[:input_body]
         @prompt_data = {}
         @menu = menu
         @page_number = page_number
