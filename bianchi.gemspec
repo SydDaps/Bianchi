@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require_relative "lib/bianci/version"
+require_relative "lib/bianchi/version"
 
 Gem::Specification.new do |spec|
-  spec.name          = "bianci"
-  spec.version       = Bianci::VERSION
+  spec.name          = "bianchi"
+  spec.version       = Bianchi::VERSION
   spec.authors       = ["Dapilah Sydney"]
   spec.email         = ["51008616+SydDaps@users.noreply.github.com"]
 

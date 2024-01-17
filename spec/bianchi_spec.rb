@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-RSpec.describe Bianci do
+RSpec.describe Bianchi do
   it "has a version number" do
-    expect(Bianci::VERSION).not_to be nil
+    expect(Bianchi::VERSION).not_to be nil
   end
 
   it "does something useful" do

@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
-module Bianci
+module Bianchi
   module USSD
     class Session
-      attr_accessor :params, :activity_state, :prompt_data, :menu, :page_number, :store, :id, :mobile_number
+      attr_accessor :params, :activity_state, :prompt_data,
+                    :menu, :page_number, :store,
+                    :id, :mobile_number, :input_body
 
       def initialize(params, menu = nil, page_number = nil)
         @params = params.with_indifferent_access
@@ -14,7 +16,7 @@ module Bianci
         @prompt_data = {}
         @menu = menu
         @page_number = page_number
-        @store = Bianci::USSD::Store.new(self)
+        @store = Store.new(self)
       end
     end
   end

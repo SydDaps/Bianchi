@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Bianci
+module Bianchi
   module USSD
     class Menu
       attr_reader :name, :options

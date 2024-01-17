@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Bianci
+module Bianchi
   module USSD
     class Engine
       attr_accessor :params, :session, :menus, :prompt_data
@@ -40,10 +40,7 @@ module Bianci
           raise ArgumentError, "menu_name expected to either be string/symbol to define menus"
         end
 
-        unless options.is_a? Hash
-          raise ArgumentError,
-                "menu_options expected to be a hash to start engine"
-        end
+        raise ArgumentError, "menu_options expected to be a hash to start engine" unless options.is_a? Hash
 
         @menus << Menu.new(menu_name, options)
       end

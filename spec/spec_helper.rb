@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "bianci"
+require "bianchi"
 require "byebug"
 
 RSpec.configure do |config|
