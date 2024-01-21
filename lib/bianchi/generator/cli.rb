@@ -1,5 +1,4 @@
 require 'thor'
-
 module Bianchi
   module Generator
     class Cli < Thor
