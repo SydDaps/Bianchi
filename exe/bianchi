@@ -1,0 +1,3 @@
+#!/usr/bin/env ruby
+require 'bianchi/generator/cli'
+Bianchi::Generator::Cli.start

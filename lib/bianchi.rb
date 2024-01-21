@@ -5,6 +5,7 @@ require "active_support/core_ext/string"
 require "redis"
 require "json"
 
+
 require_relative "bianchi/version"
 require_relative "bianchi/ussd/engine"
 require_relative "bianchi/ussd/menu"
@@ -15,6 +16,4 @@ require_relative "bianchi/ussd/store"
 require_relative "bianchi/ussd/errors"
 
 module Bianchi
-  class Error < StandardError; end
-  # Your code goes here...
 end
