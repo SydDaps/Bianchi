@@ -1,4 +1,6 @@
 #!/usr/bin/env ruby
-require 'bianchi'
+# frozen_string_literal: true
+
+require "bianchi"
 
 Bianchi::Cli::Main.start

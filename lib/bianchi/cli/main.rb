@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 
 module Bianchi
   module Cli
@@ -18,8 +19,7 @@ module Bianchi
       desc "g", "generates a menu page file"
       map %w[g generate] => :generate
       def generate(entity = nil, entity_name = nil, type = nil, number = nil)
-
-        unless ["menu"].include?(entity) && entity_name.is_a?(String) && type == 'page' && number.to_i.to_s == number
+        unless ["menu"].include?(entity) && entity_name.is_a?(String) && type == "page" && number.to_i.to_s == number
           say("Usage: bianchi g|generate menu [name:string] page [number:int]", :yellow)
           say("example: bianchi generate menu main page 1")
           exit(1)
