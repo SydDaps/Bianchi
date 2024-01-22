@@ -1,4 +1,4 @@
 #!/usr/bin/env ruby
 require 'bianchi'
-require 'bianchi/generator/cli'
-Bianchi::Generator::Cli.start
+
+Bianchi::Cli::Main.start
