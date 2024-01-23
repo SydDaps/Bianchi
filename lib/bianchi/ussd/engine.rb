@@ -49,7 +49,15 @@ module Bianchi
         @menus << Menu.new(menu_name, options)
       end
 
+      def ensure_initial_menu
+        return if initial_menu
+
+        raise PageLoadError, "an initial menu is required to proceed"
+      end
+
       def process_activity_state
+        ensure_initial_menu
+
         page = case session.activity_state.to_sym
                when :initial
                  initial_menu_page
@@ -61,8 +69,12 @@ module Bianchi
       end
 
       def initial_menu_page
-        session.menu = menus.find { |menu| menu.options[:initial] }
+        session.menu = initial_menu
         menu_page("Page1", :request)
+      end
+
+      def initial_menu
+        menus.find { |menu| menu.options[:initial] }
       end
 
       def subsequent_menu_page
