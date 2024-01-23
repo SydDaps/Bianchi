@@ -30,9 +30,13 @@ module Bianchi
         required_params = %w[session_id mobile_number input_body activity_state]
 
         left_required_params = required_params - params.keys.map(&:to_s)
-        return if left_required_params.empty?
+        unless left_required_params.empty?
+          raise ArgumentError, "#{left_required_params} required in params to start engine"
+        end
 
-        raise ArgumentError, "#{left_required_params} required in params to start engine"
+        return if %w[initial subsequent].include? params[:activity_state]
+
+        raise ArgumentError, "activity_state has to either be initial or subsequent"
       end
 
       def menu(menu_name, options = {})
@@ -46,35 +50,41 @@ module Bianchi
       end
 
       def process_activity_state
-        case session.activity_state.to_sym
-        when :initial
-          initial_page
-        when :subsequent
-          subsequent_page
-        end
+        page = case session.activity_state.to_sym
+               when :initial
+                 initial_menu_page
+               when :subsequent
+                 subsequent_menu_page
+               end
+
+        @prompt_data = page.session_prompt_data
       end
 
-      def initial_page
-        initial_menu = menus.find { |menu| menu.options[:initial] }
-        render_menu_page(initial_menu, "Page1", :request)
+      def initial_menu_page
+        session.menu = menus.find { |menu| menu.options[:initial] }
+        menu_page("Page1", :request)
       end
 
-      def subsequent_page
+      def subsequent_menu_page
         previous_session = session.store.previous_session
-        render_menu_page(previous_session.menu, previous_session.page_number, :response)
+        session.menu = previous_session.menu
+
+        menu_page(previous_session.page_number, :response)
       end
 
-      def render_menu_page(menu_object, page_number, action)
-        constant_name = "USSD::#{menu_object.name.camelize}Menu::#{page_number}"
+      def menu_page(page_number, action)
+        constant_name = "USSD::#{session.menu.name.camelize}Menu::#{page_number}"
         page = constant_name.safe_constantize
 
         unless page
           raise PageLoadError,
-                "#{constant_name} is supposed to be defined to process #{menu_object.name} menu #{page_number}"
+                "#{constant_name} is supposed to be defined to process #{session.menu.name} menu #{page_number}"
         end
 
-        session.menu = menu_object
-        @prompt_data = page.new(session).send(action).prompt_data
+        page.new(session).tap do |p|
+          p.ensure_methods_defined(%i[request response])
+          p.send(action)
+        end
       end
     end
   end

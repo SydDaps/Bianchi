@@ -16,12 +16,22 @@ module Bianchi
         File.dirname(__FILE__)
       end
 
-      desc "g", "generates a menu page file"
+      desc "setup", "sets up a new ussd project"
+      def setup
+        template("templates/engine.erb", "ussd/engine.rb")
+      end
+
+      desc "g", "Generates a menu page file"
+      long_desc <<-LONG_DESC
+        Usage: bianchi g|generate menu [name:string] page [number:int]
+        \x5 Example: `bianchi generate menu main page 1`
+      LONG_DESC
+
       map %w[g generate] => :generate
       def generate(entity = nil, entity_name = nil, type = nil, number = nil)
         unless ["menu"].include?(entity) && entity_name.is_a?(String) && type == "page" && number.to_i.to_s == number
           say("Usage: bianchi g|generate menu [name:string] page [number:int]", :yellow)
-          say("example: bianchi generate menu main page 1")
+          say("Example: bianchi generate menu main page 1")
           exit(1)
         end
 

@@ -36,6 +36,22 @@ module Bianchi
         session.menu = Menu.new(menu_name)
         page.new(session).send(:request)
       end
+
+      def ensure_methods_defined(methods)
+        error_messages = methods.each_with_object([]) do |method, messages|
+          next if methods_defined? method
+
+          messages << "#{self.class.name} is supposed to have method #{method} defined"
+        end
+
+        return if error_messages.empty?
+
+        raise PageLoadError, error_messages.join(", ")
+      end
+
+      def methods_defined?(method)
+        respond_to? method
+      end
     end
   end
 end
