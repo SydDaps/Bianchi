@@ -44,10 +44,20 @@ RSpec.describe Bianchi::USSD::Engine do
         expect(error.message).to eq "USSD::MainMenu::Page1 is supposed to be defined to process main menu Page1"
       end
     end
+
+    it "raises page load error when request or response is not defined on page" do
+      stub_const 'USSD::MainMenu::Page1', instance_double('USSD::MainMenu::Page1', new: page)
+      allow(page).to receive(:request).and_return( page.render_and_end "test_page")
+
+      expect{ Bianchi::USSD::Engine.start(correct_params) { menu :main, initial: true} }.to raise_error do |error|
+        expect(error).to be_a(Bianchi::USSD::PageLoadError)
+        expect(error.message).to eq "Bianchi::USSD::Page is supposed to have method response defined"
+      end
+    end
   end
 
   context "Operation" do
-    it "renders am initial menu pages request" do
+    it "renders an initial menu pages request" do
       stub_const 'USSD::MainMenu::Page1', instance_double('USSD::MainMenu::Page1', new: page)
       allow(page).to receive(:response).and_return( page.render_and_end "test")
       allow(page).to receive(:request).and_return( page.render_and_await "test")
