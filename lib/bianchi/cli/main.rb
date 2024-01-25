@@ -18,7 +18,23 @@ module Bianchi
       end
 
       desc "setup", "sets up a new ussd project"
+      long_desc <<-LONG_DESC
+        Usage: bianchi setup optional(-p|--provider)
+        \x5 Providers: [:africa_is_talking]
+        \x5 Example: `bianchi setup`
+        \x5 Example: `bianchi setup -p :africa_is_talking`
+
+      LONG_DESC
+      method_option :provider, :aliases => "-p", type: :string, :desc => "Set up ussd project for provider"
       def setup
+        @provider = options[:provider]
+        unless ["africa_is_talking", "none"].include? @provider
+          say("Error: provider #{@provider} is not yet configured.", :yellow)
+          exit(1)
+        end
+
+        @provider = ", provider: :#{@provider}" if @provider
+
         template("templates/engine.erb", "ussd/engine.rb")
       end
 
