@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# rubocop:disable Metrics/BlockLength
+# rubocop:disable Metrics/BlockLength, Lint/EmptyBlock
 RSpec.describe Bianchi::USSD::Engine do
   let(:correct_params) do
     {
@@ -75,4 +75,4 @@ RSpec.describe Bianchi::USSD::Engine do
     end
   end
 end
-# rubocop:enable Metrics/BlockLength
+# rubocop:enable Metrics/BlockLength, Lint/EmptyBlock

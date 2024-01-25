@@ -26,7 +26,8 @@ module Bianchi
 
         menu = Menu.new(previous_activity_data[:menu])
         page_number = previous_activity_data[:page_number]
-        Session.new(previous_activity_data, menu, page_number)
+        params = previous_activity_data[:params]
+        Session.new(params, menu, page_number)
       end
 
       def get(key)

@@ -53,9 +53,13 @@ module Bianchi
 
         raise PageLoadError, "can not redirect to previous page from page 1" if next_page_number < 1
 
-        page[-1] = next_page_number.to_s
+        [page_number(page, next_page_number), session.menu.name]
+      end
 
-        [page, session.menu.name]
+      def page_number(page, next_page_number)
+        page.length == 4 ? page << next_page_number.to_s : page[-1] = next_page_number.to_s
+
+        page
       end
 
       def to_menu_page(menu_name, page_number)
