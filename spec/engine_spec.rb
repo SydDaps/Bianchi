@@ -88,10 +88,10 @@ RSpec.describe Bianchi::USSD::Engine do
   context "Providers africa_is_talking" do
     let(:africa_is_talking_params) do
       {
-      "sessionId" => "345344322123",
-      "serviceCode" => "*123#",
-      "phoneNumber" => "+233557711911",
-      "text" => ""
+        "sessionId" => "345344322123",
+        "serviceCode" => "*123#",
+        "phoneNumber" => "+233557711911",
+        "text" => ""
       }
     end
 
@@ -100,7 +100,9 @@ RSpec.describe Bianchi::USSD::Engine do
       allow(page).to receive(:response).and_return(page.render_and_end("testing africa_is_talking"))
       allow(page).to receive(:request).and_return(page.render_and_await("test africa_is_talking"))
 
-      engine_object = Bianchi::USSD::Engine.start(africa_is_talking_params, provider: :africa_is_talking) { menu :main, initial: true }
+      engine_object = Bianchi::USSD::Engine.start(africa_is_talking_params, provider: :africa_is_talking) do
+        menu :main, initial: true
+      end
       expect(engine_object.prompt_data).to eq("CON test africa_is_talking")
     end
   end

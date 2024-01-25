@@ -32,9 +32,9 @@ module Bianchi
         return if options.empty?
 
         allowed_options = %i[provider]
-        unless (options.keys.map(&:to_sym) - allowed_options).empty?
-          raise ArgumentError, "#{allowed_options} are the only valid option keys"
-        end
+        return if (options.keys.map(&:to_sym) - allowed_options).empty?
+
+        raise ArgumentError, "#{allowed_options} are the only valid option keys"
       end
 
       def self.validate_params(params)
