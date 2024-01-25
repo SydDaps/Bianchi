@@ -3,28 +3,41 @@
 module Bianchi
   module USSD
     class Engine
-      attr_accessor :params, :session, :menus, :prompt_data
+      include USSD::ProviderConfigurations
 
-      def initialize(params)
-        @session = Session.new(params)
+      attr_accessor :params, :session, :menus, :prompt_data, :provider
+
+      def initialize(params, options)
+        validate_engine_options(options)
+
+        @provider = options[:provider]&.to_sym || :none
+        @params = parse_params(params)
+        @session = Session.new @params
         @menus = []
         @prompt_data = nil
       end
 
-      def self.start(params, &block)
+      def self.start(params, options = {}, &block)
         raise ArgumentError, "block required to start the engine" unless block_given?
 
-        validate_start_params(params)
-
-        engine = new(params)
-
-        engine.tap do |e|
+        new(params, options).tap do |e|
+          validate_params(e.params)
           e.instance_eval(&block)
           e.process_activity_state
         end
       end
 
-      def self.validate_start_params(params)
+      def validate_engine_options(options)
+        raise ArgumentError, "options expected to be a hash to start engine" unless options.is_a? Hash
+        return if options.empty?
+
+        allowed_options = %i[provider]
+        unless (options.keys.map(&:to_sym) - allowed_options).empty?
+          raise ArgumentError, "#{allowed_options} are the only valid option keys"
+        end
+      end
+
+      def self.validate_params(params)
         raise ArgumentError, "params expected to be a hash to start engine" unless params.is_a? Hash
 
         required_params = %w[session_id mobile_number input_body activity_state]
@@ -65,7 +78,7 @@ module Bianchi
                  subsequent_menu_page
                end
 
-        @prompt_data = page.session_prompt_data
+        @prompt_data = parser_prompt_data page.session_prompt_data
       end
 
       def initial_menu_page
@@ -79,6 +92,10 @@ module Bianchi
 
       def subsequent_menu_page
         previous_session = session.store.previous_session
+        unless previous_session
+          raise PageLoadError, "Previous session not found to load subsequent page restart from initial menu"
+        end
+
         session.menu = previous_session.menu
 
         menu_page(previous_session.page_number, :response)

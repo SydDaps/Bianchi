@@ -15,7 +15,7 @@ module Bianchi
         raise ArgumentError, "render body expected to be a string" unless body.is_a? String
 
         session.tap do |s|
-          s.prompt_data = s.params.slice(:mobile_number, :session_id).merge(
+          s.prompt_data = s.params.merge(
             { activity_state: options[:state], body: body }
           )
 

@@ -5,5 +5,6 @@ module Bianchi
     class ArgumentError < StandardError; end
     class PageLoadError < StandardError; end
     class MethodNameError < StandardError; end
+    class ProviderError < StandardError; end
   end
 end

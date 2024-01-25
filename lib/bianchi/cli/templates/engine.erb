@@ -2,7 +2,7 @@ module USSD
   class Engine
     def self.start(params)
 
-      Bianchi::USSD::Engine.start(params) do
+      Bianchi::USSD::Engine.start(params, provider: :none) do
         # e.g menu :main, options
 
 

@@ -6,6 +6,7 @@ require "json"
 require "thor"
 
 require_relative "bianchi/version"
+require_relative "bianchi/ussd/provider_configurations"
 require_relative "bianchi/ussd/engine"
 require_relative "bianchi/ussd/menu"
 require_relative "bianchi/ussd/session"

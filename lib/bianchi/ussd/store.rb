@@ -22,6 +22,8 @@ module Bianchi
 
       def previous_session
         previous_activity = @redis.hgetall("#{session.id}-#{session.mobile_number}-activity")
+        return if previous_activity.empty?
+
         previous_activity_data = JSON.parse(previous_activity["data"]).with_indifferent_access
 
         menu = Menu.new(previous_activity_data[:menu])

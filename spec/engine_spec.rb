@@ -32,6 +32,15 @@ RSpec.describe Bianchi::USSD::Engine do
       end
     end
 
+    it "raises argument error when invalid options are passed" do
+      expect { Bianchi::USSD::Engine.start(correct_params, wrong_option: :test) {} }.to raise_error do |error|
+        expect(error).to be_a(Bianchi::USSD::ArgumentError)
+        expect(error.message).to eq(
+          "[:provider] are the only valid option keys"
+        )
+      end
+    end
+
     it "raises page load error when initial menu isn't defined" do
       expect { Bianchi::USSD::Engine.start(correct_params) {} }.to raise_error do |error|
         expect(error).to be_a(Bianchi::USSD::PageLoadError)
@@ -69,9 +78,30 @@ RSpec.describe Bianchi::USSD::Engine do
           "activity_state" => :await,
           "body" => "test",
           "mobile_number" => "+233557711911",
-          "session_id" => "345344322123"
+          "session_id" => "345344322123",
+          "input_body" => ""
         }
       )
+    end
+  end
+
+  context "Providers africa_is_talking" do
+    let(:africa_is_talking_params) do
+      {
+      "sessionId" => "345344322123",
+      "serviceCode" => "*123#",
+      "phoneNumber" => "+233557711911",
+      "text" => ""
+      }
+    end
+
+    it "parses params to meet africa_is_talking docs" do
+      stub_const "USSD::MainMenu::Page1", instance_double("USSD::MainMenu::Page1", new: page)
+      allow(page).to receive(:response).and_return(page.render_and_end("testing africa_is_talking"))
+      allow(page).to receive(:request).and_return(page.render_and_await("test africa_is_talking"))
+
+      engine_object = Bianchi::USSD::Engine.start(africa_is_talking_params, provider: :africa_is_talking) { menu :main, initial: true }
+      expect(engine_object.prompt_data).to eq("CON test africa_is_talking")
     end
   end
 end
