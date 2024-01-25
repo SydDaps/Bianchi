@@ -6,19 +6,18 @@ Gem::Specification.new do |spec|
   spec.name          = "bianchi"
   spec.version       = Bianchi::VERSION
   spec.authors       = ["Dapilah Sydney"]
-  spec.email         = ["51008616+SydDaps@users.noreply.github.com"]
+  spec.email         = ['dapilah.sydney@gmail.com']
 
   spec.summary       = "Write a short summary, because RubyGems requires one."
-  spec.description   = "Write a longer description or delete this line."
-  spec.homepage      = "http://mygemserver.com"
+  spec.homepage      = "https://github.com/SydDaps/Bianchi"
   spec.license       = "MIT"
   spec.required_ruby_version = Gem::Requirement.new(">= 3.0.0")
 
-  spec.metadata["allowed_push_host"] = "TODO: Set to 'http://mygemserver.com'"
+  spec.metadata["allowed_push_host"] = "https://rubygems.org/"
 
-  spec.metadata["homepage_uri"] = "http://mygemserver.com"
-  spec.metadata["source_code_uri"] = "http://mygemserver.com"
-  spec.metadata["changelog_uri"] = "http://mygemserver.com"
+  spec.metadata["homepage_uri"] = "https://github.com/SydDaps/Bianchi"
+  spec.metadata["source_code_uri"] = "https://github.com/SydDaps/Bianchi"
+  spec.metadata["changelog_uri"] = "https://rubygems.org/"
 
   # Specify which files should be added to the gem when it is released.
   # The `git ls-files -z` loads the files in the RubyGem that have been added into git.
