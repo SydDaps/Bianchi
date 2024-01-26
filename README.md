@@ -4,6 +4,8 @@ A DSL (Domain-Specific Language) and a minimalist framework in Ruby, tailored fo
 ## Installation
 Add `gem 'bianchi', '~> 0.1.0'` to your gem file and run `bundle install`
 
+Bianchi relies on Redis and requires the `REDIS_URL` environment variable to be set, pointing to your Redis instance. Ensure Redis is installed, running, and that REDIS_URL is correctly configured before using Bianchi.
+
 ## Getting Started
 
 To initialize a new USSD project, generate a project directory using Bianchi's command-line interface. Use the following Ruby command:
@@ -73,7 +75,7 @@ module USSD
       def response
         case session_input_body
         when "1"
-          redirect_to_greet_menu_page_1
+          redirect_to_greetings_menu_page_1
         when "2"
           redirect_to_repeat_menu_page_1
         else
@@ -147,4 +149,49 @@ user_id = session.store.get('user_id')
 
 # Retrieving the entire cache
 all_data = session.store.all
+```
+
+### Page Redirects
+
+In Bianchi USSD applications, any method that starts with `redirect_to` initiates another page request to be sent to the user. An example use case is when you want to transition to another menu page after processing the user's response.
+
+For instance, in the snippet of the main menu page provided earlier, we use `redirect_to_greetings_menu_page_1` when the user selects "1". This directs the application to the greetings menu page 1's request.
+
+Here are the methods available within the page redirects:
+
+- `redirect_to_menu_[menu_name]_page_[page_number]`: Redirects to a specified menu using the `menu_name` and loads the page specified by `page_number`.
+- `redirect_to_[next|previous]_page`: Redirects to the next or previous page within the same menu.
+
+Here's how you can use these methods within your Bianchi USSD application:
+
+```ruby
+# Redirecting to a specific menu page
+redirect_to_menu_greetings_page_1
+
+# Redirecting to the next or previous page in the same menu
+redirect_to_next_page
+redirect_to_previous_page
+```
+
+## Responding to the Provider
+
+Once all processes are completed, the next step is to prepare the response to send to the provider. The provider prompt data is accessible via the engine instance's `prompt_data` attribute.
+
+Here's an example of how you can retrieve the provider prompt data in your USSD application:
+
+```ruby
+module USSD
+  class Engine
+    def self.start(params)
+      Bianchi::USSD::Engine.start(params, provider: :africa_is_talking) do
+          menu :main, options
+          menu :greetings
+          menu :repeat
+      end
+    end
+  end
+end
+
+# Retrieving provider prompt data
+provider_data = USSD::Engine.new(provider_params).prompt_data
 ```
