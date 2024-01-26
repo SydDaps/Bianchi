@@ -39,10 +39,10 @@ For example, let's define our first menu, which serves as the initial menu of th
 ```ruby
 menu :main, initial: true
 ```
-now that we have the initial menu up let's generate our pages for that menu with using Bianchi's command-line interface. Use the following Ruby command:
+now that we have the initial menu up let's generate our pages for that menu using Bianchi's command-line interface. Use the following Ruby command:
 ```ruby
 command: bundle exec bianchi g menu menu_name page page_number
-example: bianch g menu main page 1
+example: bianchi g menu main page 1
 ```
 This creates a `ussd/main_menu/page_1` file in the project root directory. Here's a sample content of the file:
 
