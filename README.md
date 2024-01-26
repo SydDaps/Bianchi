@@ -96,3 +96,55 @@ end
 ```
 
 In this example, when a page is requested, you send some information, and the end user submits data for that request. The `response` method processes the response data and can move to a new page request, end the session, or send a response from there.
+### Page Renders
+
+In Bianchi USSD applications, any method that starts with `render` sends data back to the user. Typically, we either send data and expect a response or send data and terminate the session. Here are the two main methods for rendering pages:
+
+- `render_and_await(string)`: Responds to the user and expects the user to respond.
+
+- `render_and_end(string)`: Responds to the user and terminates the session.
+
+Here's how you can use these methods in Ruby:
+```ruby
+render_and_await("Please select an option:")
+```
+This method sends the message "Please select an option:" to the user and awaits their response.
+```ruby
+render_and_end("Thank you for using our service. Goodbye!")
+```
+This method sends the message "Thank you for using our service. Goodbye!" to the user and terminates the session.
+
+### Page Session
+
+In Bianchi USSD applications, the `session` serves as an information tracker between all the pages and records all interactions between the user and the application. It contains valuable information necessary for the USSD application to function properly.
+
+Here are the methods available within the page session:
+
+- `session_params`: Returns a hash containing all the data the provider sent.
+- `session_input_body`: Retrieves the user's current input.
+- `session_mobile_number`: Returns the current user's phone number dialing the code.
+- `session_session_id`: Provides the session's ID.
+- `session.store`: Accesses the current session's cache. Further details about this will be discussed later.
+
+### Page Store
+
+In Bianchi USSD applications, the `session.store` serves as the main application cache, where data can be stored and accessed across all pages.
+
+Here are the methods available within the page store:
+
+- `session.store.set(key, value)`: Stores a key-value pair in the cache.
+- `session.store.get(key)`: Retrieves the value associated with a given key from the cache.
+- `session.store.all`: Returns the entire cache as a hash.
+
+Here's how you can use these methods to manage your application's cache:
+
+```ruby
+# Storing data in the cache
+session.store.set('user_id', 123)
+
+# Retrieving data from the cache
+user_id = session.store.get('user_id')
+
+# Retrieving the entire cache
+all_data = session.store.all
+```
