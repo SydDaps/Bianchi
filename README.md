@@ -1,43 +1,98 @@
-# bianchi
-
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/bianchi`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+# Bianchi
+A DSL (Domain-Specific Language) and a minimalist framework in Ruby, tailored for USSD development. Structured around a menu page approach, Bianchi offers a comprehensive suite of methods and generators, streamlining the process of building USSD applications efficiently and easily.
 
 ## Installation
+Add `gem 'bianchi', '~> 0.1.0'` to your gem file and run `bundle install`
 
-Add this line to your application's Gemfile:
+## Getting Started
+
+To initialize a new USSD project, generate a project directory using Bianchi's command-line interface. Use the following Ruby command:
 
 ```ruby
-gem 'bianchi'
+bundle exec bianchi setup -p provider_name
 ```
 
-And then execute:
+Replace `provider_name` with your desired provider. Currently supported providers include: africa_is_talking.
 
-    $ bundle install
+This command creates a `ussd/engine.rb` file in the project root directory. Here's a sample content of `ussd/engine.rb`:
 
-Or install it yourself as:
+```ruby
+module USSD
+  class Engine
+    def self.start(params)
+      Bianchi::USSD::Engine.start(params, provider: :africa_is_talking) do
+        # e.g menu :main, options
+      end
+    end
+  end
+end
+```
 
-    $ gem install bianchi
+To define menus for your USSD applications' engine instance, use the following command:
 
-## Usage
+```ruby
+menu :menu_name, options
+```
 
-TODO: Write usage instructions here
+For example, let's define our first menu, which serves as the initial menu of the application, and let's call this the main menu:
 
-## Development
+```ruby
+menu :main, initial: true
+```
+now that we have the initial menu up let's generate our pages for that menu with using Bianchi's command-line interface. Use the following Ruby command:
+```ruby
+command: bundle exec bianchi g menu menu_name page page_number
+example: bianch g menu main page 1
+```
+This creates a `ussd/main_menu/page_1` file in the project root directory. Here's a sample content of the file:
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+```ruby
+module USSD
+  module MainMenu
+    class Page1 < Bianchi::USSD::Page
+      def request
+      end
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+      def response
+      end
+    end
+  end
+end
+```
 
-## Contributing
+In the `ussd/main_menu/page_1` file, the main application code goes into the `request` and `response` methods. Here's a sample code to illustrate the usage:
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/bianchi. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/bianchi/blob/master/CODE_OF_CONDUCT.md).
+```ruby
+module USSD
+  module MainMenu
+    class Page1 < Bianchi::USSD::Page
+      def request
+        render_and_await(request_body)
+      end
 
-## License
+      def response
+        case session_input_body
+        when "1"
+          redirect_to_greet_menu_page_1
+        when "2"
+          redirect_to_repeat_menu_page_1
+        else
+          render_and_await("invalid input \n" + request_body)
+        end
+      end
 
-The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
+      private
 
-## Code of Conduct
+      def request_body
+        <<~MSG
+          Welcome
+          1. Greetings
+          2. Repeat my name
+        MSG
+      end
+    end
+  end
+end
+```
 
-Everyone interacting in the bianchi project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/bianchi/blob/master/CODE_OF_CONDUCT.md).
+In this example, when a page is requested, you send some information, and the end user submits data for that request. The `response` method processes the response data and can move to a new page request, end the session, or send a response from there.
