@@ -6,7 +6,7 @@ module Bianchi
       def parse_params(params)
         provider_parsers = {
           none: proc { params },
-          africa_is_talking: proc { africa_is_talking_params_parser(params) }
+          africastalking: proc { africastalking_params_parser(params) }
         }.with_indifferent_access
 
         parser = provider_parsers[@provider]
@@ -16,7 +16,7 @@ module Bianchi
         parser.call
       end
 
-      def africa_is_talking_params_parser(params)
+      def africastalking_params_parser(params)
         required_params = %w[sessionId phoneNumber text serviceCode]
         left_required_params = required_params - params.keys.map(&:to_s)
 
@@ -28,7 +28,7 @@ module Bianchi
           session_id: params["sessionId"],
           mobile_number: params["phoneNumber"],
           activity_state: params["text"] && params["text"].empty? ? "initial" : "subsequent",
-          input_body: params["text"],
+          input_body: params["text"].split('*').last,
           service_code: params["serviceCode"]
         }
       end
@@ -36,7 +36,7 @@ module Bianchi
       def parser_prompt_data(prompt_data)
         provider_parsers = {
           none: proc { prompt_data },
-          africa_is_talking: proc { africa_is_talking_prompt_data_parser(prompt_data) }
+          africastalking: proc { africastalking_prompt_data_parser(prompt_data) }
         }.with_indifferent_access
 
         parser = provider_parsers[@provider]
@@ -46,7 +46,7 @@ module Bianchi
         parser.call
       end
 
-      def africa_is_talking_prompt_data_parser(prompt_data)
+      def africastalking_prompt_data_parser(prompt_data)
         prompt_data["activity_state"] == :await ? "CON #{prompt_data['body']}" : "END #{prompt_data['body']}"
       end
     end
