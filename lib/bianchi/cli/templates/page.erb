@@ -1,11 +1,9 @@
 module USSD
   module <%= @menu_name.camelize %>Menu
     class Page<%= @page_number  %> < Bianchi::USSD::Page
-      def request
-      end
+      def request; end
 
-      def response
-      end
+      def response; end
     end
   end
 end

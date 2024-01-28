@@ -29,8 +29,11 @@ module Bianchi
         page = constant_name.safe_constantize
 
         unless page
-          raise PageLoadError,
-                "#{constant_name} is supposed to be defined to process #{menu_name} menu #{page_number}"
+          raise PageLoadError, <<~MSG
+            \n
+            #{constant_name} is supposed to be defined to process #{menu_name} menu #{page_number}.
+            generate menu page with `bianchi g menu #{menu_name} page #{page_number[4..]}`
+          MSG
         end
 
         session.menu = Menu.new(menu_name)

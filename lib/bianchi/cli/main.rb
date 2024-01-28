@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# rubocop:disable Metrics/ParameterLists
 module Bianchi
   module Cli
     class Main < Thor
@@ -25,10 +24,10 @@ module Bianchi
         \x5 Example: `bianchi setup -p :africa_is_talking`
 
       LONG_DESC
-      method_option :provider, :aliases => "-p", type: :string, :desc => "Set up ussd project for provider"
+      method_option :provider, aliases: "-p", type: :string, desc: "Set up ussd project for provider"
       def setup
         @provider = options[:provider]
-        unless ["africastalking", "none"].include? @provider
+        unless %w[africastalking none].include? @provider
           say("Error: provider #{@provider} is not yet configured.", :yellow)
           exit(1)
         end
@@ -63,4 +62,3 @@ module Bianchi
     end
   end
 end
-# rubocop:enable Metrics/ParameterLists

@@ -6,7 +6,7 @@ Gem::Specification.new do |spec|
   spec.name          = "bianchi"
   spec.version       = Bianchi::VERSION
   spec.authors       = ["Dapilah Sydney"]
-  spec.email         = ['dapilah.sydney@gmail.com']
+  spec.email         = ["dapilah.sydney@gmail.com"]
 
   spec.summary       = "Write a short summary, because RubyGems requires one."
   spec.homepage      = "https://github.com/SydDaps/Bianchi"
