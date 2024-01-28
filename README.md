@@ -14,7 +14,7 @@ To initialize a new USSD project, generate a project directory using Bianchi's c
 bundle exec bianchi setup -p provider_name
 ```
 
-Replace `provider_name` with your desired provider. Currently supported providers include: africa_is_talking.
+Replace `provider_name` with your desired provider. Currently supported providers include: africastalking.
 
 This command creates a `ussd/engine.rb` file in the project root directory. Here's a sample content of `ussd/engine.rb`:
 
@@ -22,7 +22,7 @@ This command creates a `ussd/engine.rb` file in the project root directory. Here
 module USSD
   class Engine
     def self.start(params)
-      Bianchi::USSD::Engine.start(params, provider: :africa_is_talking) do
+      Bianchi::USSD::Engine.start(params, provider: :africastalking) do
         # e.g menu :main, options
       end
     end
@@ -52,11 +52,9 @@ This creates a `ussd/main_menu/page_1` file in the project root directory. Here'
 module USSD
   module MainMenu
     class Page1 < Bianchi::USSD::Page
-      def request
-      end
+      def request; end
 
-      def response
-      end
+      def response; end
     end
   end
 end
