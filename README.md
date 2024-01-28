@@ -2,7 +2,7 @@
 A DSL (Domain-Specific Language) and a minimalist framework in Ruby, tailored for USSD development. Structured around a menu page approach, Bianchi offers a comprehensive suite of methods and generators, streamlining the process of building USSD applications efficiently and easily.
 
 ## Installation
-Add `gem 'bianchi', '~> 0.1.0'` to your gem file and run `bundle install`
+Add `gem 'bianchi', '~> 0.1.1'` to your gem file and run `bundle install`
 
 Bianchi relies on Redis and requires the `REDIS_URL` environment variable to be set, pointing to your Redis instance. Ensure Redis is installed, running, and that REDIS_URL is correctly configured before using Bianchi.
 
