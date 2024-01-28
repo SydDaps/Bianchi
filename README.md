@@ -181,7 +181,7 @@ Here's an example of how you can retrieve the provider prompt data in your USSD 
 module USSD
   class Engine
     def self.start(params)
-      Bianchi::USSD::Engine.start(params, provider: :africa_is_talking) do
+      Bianchi::USSD::Engine.start(params, provider: :africastalking) do
           menu :main, options
           menu :greetings
           menu :repeat
