@@ -7,6 +7,7 @@ require "thor"
 
 require_relative "bianchi/version"
 require_relative "bianchi/ussd/provider_parsers/africastalking"
+require_relative "bianchi/ussd/provider_parsers/appsnmobile"
 require_relative "bianchi/ussd/provider_configurations"
 require_relative "bianchi/ussd/engine"
 require_relative "bianchi/ussd/menu"

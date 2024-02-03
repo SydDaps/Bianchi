@@ -12,16 +12,25 @@ module Bianchi
   
             {
               session_id: params['session_id'],
-              msisdn: params['msisdn'],
-              msg_type: return_activity_state(params['msg_type']),
-              ussd_bod: params['ussd_body'],
+              mobile_number: params['msisdn'],
+              activity_state: return_activity_state(params['msg_type']),
+              input_body: params['ussd_body'],
               nw_code: params['nw_code'],
               service_code: params['service_code']
             }
           end
   
           def appsnmobile_prompt_data_parser(prompt_data)
-            prompt_data['msg_type'] == :await ? "CON #{prompt_data['body']}" : "END #{prompt_data['body']}"
+            msg_type = prompt_data['activity_state'] == :await ? '1' : '2'
+
+            {
+              session_id: prompt_data['session_id'],
+              msisdn: prompt_data['mobile_number'],
+              msg_type: msg_type,
+              ussd_body: prompt_data['body'],
+              nw_code: prompt_data['nw_code'],
+              service_code: prompt_data['service_code']
+            }.to_json
           end
 
           def return_activity_state(msg_type)
@@ -30,8 +39,6 @@ module Bianchi
                 'initial'
               when '1'
                 'subsequent'
-              when '2'
-                'end'
               else
                 raise ArgumentError, "#{@provider} sent in an unknown message type or msg_type"
             end

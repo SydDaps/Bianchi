@@ -4,11 +4,13 @@ module Bianchi
   module USSD
     module ProviderConfigurations
       include ProviderParsers::Africastalking
+      include ProviderParsers::Appsnmobile
 
       def parse_params(params)
         provider_parsers = {
           none: proc { params },
-          africastalking: proc { africastalking_params_parser(params) }
+          africastalking: proc { africastalking_params_parser(params) },
+          appsnmobile: proc { appsnmobile_params_parser(params) }
         }.with_indifferent_access
 
         parser = provider_parsers[@provider]
@@ -21,7 +23,8 @@ module Bianchi
       def parser_prompt_data(prompt_data)
         provider_parsers = {
           none: proc { prompt_data },
-          africastalking: proc { africastalking_prompt_data_parser(prompt_data) }
+          africastalking: proc { africastalking_prompt_data_parser(prompt_data) },
+          appsnmobile: proc { appsnmobile_prompt_data_parser(prompt_data) }
         }.with_indifferent_access
 
         parser = provider_parsers[@provider]
