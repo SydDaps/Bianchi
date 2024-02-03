@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    bianchi (0.1.0)
+    bianchi (0.1.1)
       activesupport
       json
       redis
@@ -79,6 +79,7 @@ GEM
     unicode-display_width (1.8.0)
 
 PLATFORMS
+  arm64-darwin-22
   x86_64-darwin-23
 
 DEPENDENCIES

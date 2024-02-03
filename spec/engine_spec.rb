@@ -106,5 +106,29 @@ RSpec.describe Bianchi::USSD::Engine do
       expect(engine_object.prompt_data).to eq("CON test africa_is_talking")
     end
   end
+  context "Providers appsnmobile" do
+    let(:appsnmobile_params) do
+      {
+        "session_id" => "345344322123",
+        "msisdn" => "+233557711911",
+        "msg_type" => "1",
+        "ussd_body" => "test appsnmobile",
+        "nw_code" => nil,
+        "service_code" => nil
+      }
+    end
+
+    it "parses params to meet appsnmobile docs" do
+      stub_const "USSD::MainMenu::Page1", instance_double("USSD::MainMenu::Page1", new: page)
+      allow(page).to receive(:response).and_return(page.render_and_end("testing appsnmobile"))
+      allow(page).to receive(:request).and_return(page.render_and_await("test appsnmobile"))
+
+      engine_object = Bianchi::USSD::Engine.start(appsnmobile_params, provider: :appsnmobile) do
+        menu :main, initial: true
+      end
+      appsnmobile_params["ussd_body"] = "test appsnmobile"
+      expect(engine_object.prompt_data).to eq(appsnmobile_params.to_json)
+    end
+  end
 end
 # rubocop:enable Metrics/BlockLength
