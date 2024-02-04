@@ -32,6 +32,7 @@ RSpec.describe Bianchi::USSD::Page do
         expect(error).to be_a(Bianchi::USSD::PageLoadError)
         expect(error.message).to eq(
           <<~MSG
+            \n
             USSD::MainMenu::Page3 is supposed to be defined to process main menu Page3.
             generate menu page with `bianchi g menu main page 3`
           MSG
