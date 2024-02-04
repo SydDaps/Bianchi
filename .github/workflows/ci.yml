@@ -12,6 +12,9 @@ jobs:
   rubocop:
     runs-on: ubuntu-latest
 
+    env:
+      REDIS_URL: redis://localhost:6379
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4.1.1
