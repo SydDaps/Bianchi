@@ -85,8 +85,8 @@ RSpec.describe Bianchi::USSD::Engine do
     end
   end
 
-  context "Providers africa_is_talking" do
-    let(:africa_is_talking_params) do
+  context "Providers africastalking" do
+    let(:africastalking) do
       {
         "sessionId" => "345344322123",
         "serviceCode" => "*123#",
@@ -95,15 +95,15 @@ RSpec.describe Bianchi::USSD::Engine do
       }
     end
 
-    it "parses params to meet africa_is_talking docs" do
+    it "parses params to meet africastalking docs" do
       stub_const "USSD::MainMenu::Page1", instance_double("USSD::MainMenu::Page1", new: page)
-      allow(page).to receive(:response).and_return(page.render_and_end("testing africa_is_talking"))
-      allow(page).to receive(:request).and_return(page.render_and_await("test africa_is_talking"))
+      allow(page).to receive(:response).and_return(page.render_and_end("testing africastalking"))
+      allow(page).to receive(:request).and_return(page.render_and_await("test africastalking"))
 
-      engine_object = Bianchi::USSD::Engine.start(africa_is_talking_params, provider: :africa_is_talking) do
+      engine_object = Bianchi::USSD::Engine.start(africastalking, provider: :africastalking) do
         menu :main, initial: true
       end
-      expect(engine_object.prompt_data).to eq("CON test africa_is_talking")
+      expect(engine_object.prompt_data).to eq("CON test africastalking")
     end
   end
 end

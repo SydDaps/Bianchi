@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable Style/MissingRespondToMissing
 module Bianchi
   module USSD
     module PageDelegators
@@ -100,3 +101,4 @@ module Bianchi
     end
   end
 end
+# rubocop:enable Style/MissingRespondToMissing

@@ -30,7 +30,12 @@ RSpec.describe Bianchi::USSD::Page do
     it "should redirect to menu page with the redirect command" do
       expect { page.redirect_to_main_menu_page_3 }.to raise_error do |error|
         expect(error).to be_a(Bianchi::USSD::PageLoadError)
-        expect(error.message).to eq "USSD::MainMenu::Page3 is supposed to be defined to process main menu Page3"
+        expect(error.message).to eq(
+          <<~MSG
+            USSD::MainMenu::Page3 is supposed to be defined to process main menu Page3.
+            generate menu page with `bianchi g menu main page 3`
+          MSG
+        )
       end
     end
   end
