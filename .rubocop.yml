@@ -1,6 +1,7 @@
 AllCops:
   NewCops: enable
   TargetRubyVersion: 3.0
+  SuggestExtensions: false
 
 Style/StringLiterals:
   Enabled: true
@@ -14,6 +15,7 @@ Style/Documentation:
 
 Metrics/MethodLength:
   CountAsOne: ['array', 'heredoc', 'hash']
+
 
 
 

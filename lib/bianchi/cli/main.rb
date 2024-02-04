@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable  Metrics/ParameterLists
 module Bianchi
   module Cli
     class Main < Thor
@@ -62,3 +63,4 @@ module Bianchi
     end
   end
 end
+# rubocop:enable  Metrics/ParameterLists
