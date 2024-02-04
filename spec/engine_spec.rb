@@ -106,13 +106,14 @@ RSpec.describe Bianchi::USSD::Engine do
       expect(engine_object.prompt_data).to eq("CON test africastalking")
     end
   end
+
   context "Providers appsnmobile" do
     let(:appsnmobile_params) do
       {
         "session_id" => "345344322123",
         "msisdn" => "+233557711911",
-        "msg_type" => "1",
-        "ussd_body" => "test appsnmobile",
+        "msg_type" => "0",
+        "ussd_body" => "",
         "nw_code" => nil,
         "service_code" => nil
       }
@@ -126,7 +127,12 @@ RSpec.describe Bianchi::USSD::Engine do
       engine_object = Bianchi::USSD::Engine.start(appsnmobile_params, provider: :appsnmobile) do
         menu :main, initial: true
       end
-      appsnmobile_params["ussd_body"] = "test appsnmobile"
+
+      appsnmobile_params.merge!(
+        "ussd_body" => "test appsnmobile",
+        "msg_type" => "1"
+      )
+
       expect(engine_object.prompt_data).to eq(appsnmobile_params.to_json)
     end
   end
