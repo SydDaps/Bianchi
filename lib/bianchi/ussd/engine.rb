@@ -110,10 +110,7 @@ module Bianchi
                 "#{constant_name} is supposed to be defined to process #{session.menu.name} menu #{page_number}"
         end
 
-        page.new(session).tap do |p|
-          p.ensure_methods_defined(%i[request response])
-          p.send(action)
-        end
+        page.call(session, action)
       end
     end
   end

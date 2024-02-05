@@ -15,7 +15,7 @@ require_relative "bianchi/ussd/session"
 require_relative "bianchi/ussd/page_delegators"
 require_relative "bianchi/ussd/page"
 require_relative "bianchi/ussd/store"
-require_relative "bianchi/ussd/errors"
+require_relative "bianchi/ussd/exceptions"
 
 # cli
 require "bianchi/cli/main"

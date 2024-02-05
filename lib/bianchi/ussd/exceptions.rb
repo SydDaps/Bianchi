@@ -6,5 +6,7 @@ module Bianchi
     class PageLoadError < StandardError; end
     class MethodNameError < StandardError; end
     class ProviderError < StandardError; end
+    class ProviderError < StandardError; end
+    class DispatchRenderException < StandardError; end
   end
 end

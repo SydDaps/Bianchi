@@ -2,6 +2,22 @@
 
 # rubocop:disable Metrics/BlockLength, Lint/EmptyBlock
 RSpec.describe Bianchi::USSD::Engine do
+  before :each do
+    stub_const("ENV", ENV.to_hash.merge("REDIS_URL" => "redis://localhost:6379"))
+  end
+
+  def define_pages(methods = {})
+    page_class = Class.new(Bianchi::USSD::Page) do
+      methods.compact.each do |method_name, value_to_render|
+        define_method method_name.to_sym do
+          render_and_await value_to_render
+        end
+      end
+    end
+
+    stub_const "USSD::MainMenu::Page1", page_class
+  end
+
   let(:correct_params) do
     {
       mobile_number: "+233557711911",
@@ -56,27 +72,24 @@ RSpec.describe Bianchi::USSD::Engine do
     end
 
     it "raises page load error when request or response is not defined on page" do
-      stub_const "USSD::MainMenu::Page1", instance_double("USSD::MainMenu::Page1", new: page)
-      allow(page).to receive(:request).and_return(page.render_and_end("test_page"))
+      define_pages(request: "testing request")
 
       expect { Bianchi::USSD::Engine.start(correct_params) { menu :main, initial: true } }.to raise_error do |error|
         expect(error).to be_a(Bianchi::USSD::PageLoadError)
-        expect(error.message).to eq "Bianchi::USSD::Page is supposed to have method response defined"
+        expect(error.message).to eq "USSD::MainMenu::Page1 is supposed to have method response defined"
       end
     end
   end
 
   context "Operation" do
     it "renders an initial menu pages request" do
-      stub_const "USSD::MainMenu::Page1", instance_double("USSD::MainMenu::Page1", new: page)
-      allow(page).to receive(:response).and_return(page.render_and_end("test"))
-      allow(page).to receive(:request).and_return(page.render_and_await("test"))
+      define_pages(request: "testing request", response: "testing response")
 
       engine_object = Bianchi::USSD::Engine.start(correct_params) { menu :main, initial: true }
       expect(engine_object.prompt_data).to eq(
         {
           "activity_state" => :await,
-          "body" => "test",
+          "body" => "testing request",
           "mobile_number" => "+233557711911",
           "session_id" => "345344322123",
           "input_body" => ""
@@ -96,9 +109,7 @@ RSpec.describe Bianchi::USSD::Engine do
     end
 
     it "parses params to meet africastalking docs" do
-      stub_const "USSD::MainMenu::Page1", instance_double("USSD::MainMenu::Page1", new: page)
-      allow(page).to receive(:response).and_return(page.render_and_end("testing africastalking"))
-      allow(page).to receive(:request).and_return(page.render_and_await("test africastalking"))
+      define_pages(request: "test africastalking", response: "test africastalking response")
 
       engine_object = Bianchi::USSD::Engine.start(africastalking, provider: :africastalking) do
         menu :main, initial: true
@@ -120,16 +131,14 @@ RSpec.describe Bianchi::USSD::Engine do
     end
 
     it "parses params to meet appsnmobile docs" do
-      stub_const "USSD::MainMenu::Page1", instance_double("USSD::MainMenu::Page1", new: page)
-      allow(page).to receive(:response).and_return(page.render_and_end("testing appsnmobile"))
-      allow(page).to receive(:request).and_return(page.render_and_await("test appsnmobile"))
+      define_pages(request: "test africastalking", response: "test africastalking response")
 
       engine_object = Bianchi::USSD::Engine.start(appsnmobile_params, provider: :appsnmobile) do
         menu :main, initial: true
       end
 
       appsnmobile_params.merge!(
-        "ussd_body" => "test appsnmobile",
+        "ussd_body" => "test africastalking",
         "msg_type" => "1"
       )
 

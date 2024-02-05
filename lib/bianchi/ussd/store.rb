@@ -6,7 +6,13 @@ module Bianchi
       attr_reader :session
 
       def initialize(session)
-        @redis = Redis.new(url: ENV.fetch("REDIS_URL", nil))
+        redis_url = ENV.fetch("REDIS_URL", nil)
+        unless redis_url.present?
+          raise ArgumentError,
+                "environment variable REDIS_URL required to track engine session."
+        end
+
+        @redis = Redis.new(url: redis_url)
         @session = session
       end
 

@@ -11,6 +11,15 @@ module Bianchi
         @session = session
       end
 
+      def self.call(session, action)
+        new(session).tap do |p|
+          p.ensure_methods_defined(%i[request response])
+          p.send(action)
+        rescue DispatchRenderException
+          p
+        end
+      end
+
       def render(body, options = {})
         raise ArgumentError, "render body expected to be a string" unless body.is_a? String
 
@@ -22,6 +31,8 @@ module Bianchi
           s.page_number = self.class.name.split("::").last
           s.store.track_session
         end
+
+        raise DispatchRenderException
       end
 
       def load_page(page_number, menu_name)

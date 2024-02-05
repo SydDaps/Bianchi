@@ -2,6 +2,10 @@
 
 # rubocop:disable Metrics/BlockLength
 RSpec.describe Bianchi::USSD::Page do
+  before :each do
+    stub_const("ENV", ENV.to_hash.merge("REDIS_URL" => "redis://localhost:6379"))
+  end
+
   let(:correct_params) do
     {
       mobile_number: "+233557711911",
