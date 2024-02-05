@@ -183,7 +183,7 @@ module USSD
   class Engine
     def self.start(params)
       Bianchi::USSD::Engine.start(params, provider: :africastalking) do
-          menu :main, options
+          menu :main, initial: true
           menu :greetings
           menu :repeat
       end
