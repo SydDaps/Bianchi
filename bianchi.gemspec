@@ -8,7 +8,10 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Dapilah Sydney"]
   spec.email         = ["dapilah.sydney@gmail.com"]
 
-  spec.summary       = "A DSL (Domain-Specific Language) and a minimalist framework in Ruby, tailored for USSD development. "
+  spec.summary       = <<~MSG
+    A DSL (Domain-Specific Language) and a minimalist framework in Ruby, tailored for USSD development.
+  MSG
+
   spec.homepage      = "https://github.com/SydDaps/Bianchi"
   spec.license       = "MIT"
   spec.required_ruby_version = Gem::Requirement.new(">= 3.0.0")
