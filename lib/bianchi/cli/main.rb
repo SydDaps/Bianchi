@@ -28,7 +28,7 @@ module Bianchi
       method_option :provider, aliases: "-p", type: :string, desc: "Set up ussd project for provider"
       def setup
         @provider = options[:provider]
-        unless %w[africastalking none appsnmobile].include? @provider
+        unless %w[africastalking none appsnmobile arkesel].include? @provider
           say("Error: provider #{@provider} is not yet configured.", :yellow)
           exit(1)
         end
