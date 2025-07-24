@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Bianchi
   module USSD
     module ProviderParsers
